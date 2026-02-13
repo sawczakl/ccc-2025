@@ -1,17 +1,15 @@
-# starting doughnuts
-D = int(input())
-R = D
+D = int(input()) # number of starting doughnuts
 
-# events
-E = int(input())
+E = int(input()) # number of events
 
+# For that many events, run the loop...
 for _ in range(E):
-    symbol = input()
-    Q = int(input())
+    symbol = input() # either + or -
+    Q = int(input()) # number of doughnuts affected
 
     if symbol == '-':
-        R -= Q
+        D -= Q
     elif symbol == '+':
-        R += Q
+        D += Q
 
-print(R)
+print(D)
