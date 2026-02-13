@@ -39,7 +39,7 @@ def find_optimal_change() -> tuple[int, int]:
     # at index i is currently oc and should be changed to nc.
     # If no change is desirable, oc == nc.
 
-    # Defaults
+    # Defaults that won't affect anything if they don't get replaced
     change_i = 0
     change_oc = colours[0]
     change_nc = colours[0]
@@ -68,7 +68,7 @@ def find_optimal_change() -> tuple[int, int]:
                 greatest_difference = difference
                 change_oc = colour
                 change_nc = donor
-                change_i = None # Whoops... don't have a way to keep track of this using this algorithm...
+                change_i = None # TODO Whoops... don't have a way to keep track of this using this algorithm...
     
     return change_i, change_oc, change_nc            
 
