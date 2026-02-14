@@ -56,20 +56,26 @@ def find_optimal_change() -> tuple[int, int]:
             if donor == colour:
                 continue
 
-            indices, other_prettinesses = get_prettinesses_of_colour(donor)
+            colour_indices, other_prettinesses = get_prettinesses_of_colour(donor)
 
             # If the donor colour has only one option, it can't donate
-            if len(indices) == 1:
+            if len(colour_indices) == 1:
                 continue
 
             # Remove max to avoid swapping with it
-            # TODO I *think* this is good? That swapping with the max would not make sense?...          
-            other_prettinesses.remove(max(other_prettinesses)) # NB in Python this only removes one instance, so if there are duplicates, we're good
-            best_candidate = max(other_prettinesses)
-            i_prettiness = other_prettinesses.index(best_candidate)
-            i_colour = indices[i_prettiness]
+            # TODO I *think* this is good? That swapping with the max would not make sense?...   
 
-            difference = best_candidate - my_best
+            other_best = max(other_prettinesses)
+            i_other_best = other_prettinesses.index(other_best)
+            other_prettinesses.remove(other_best)
+            del colour_indices[i_other_best]
+
+            # Again now that the best has been removed
+            other_best = max(other_prettinesses)
+            i_prettiness = other_prettinesses.index(other_best)
+            i_colour = colour_indices[i_prettiness]
+
+            difference = other_best - my_best
             if difference > greatest_difference:
                 greatest_difference = difference
                 change_i = i_colour
