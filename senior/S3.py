@@ -119,12 +119,15 @@ def paint_picture() -> int:
     # Return painting's prettiness
     return prettiness
 
-total_prettiness = paint_picture()
-print(total_prettiness)
+print(paint_picture())
 
 for i in range(Q):    
+
     # Make the next change from Q
     kind_of_change, i_change, new_value = changes[i]
+
+    # 1-based again...
+    i_change -= 1
 
     # 1 = change colour of i-th pen
     if kind_of_change == 1:
@@ -134,5 +137,4 @@ for i in range(Q):
     elif kind_of_change == 2:
         prettinesses[i_change] = new_value
     
-    total_prettiness += paint_picture()
-    print(total_prettiness)
+    print(paint_picture())
