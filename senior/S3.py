@@ -43,13 +43,13 @@ def find_optimal_change() -> tuple[int, int]:
     change_i = 0
     change_oc = colours[0]
     change_nc = colours[0]
+
     greatest_difference = 0
 
-    # Try all colours' best ones
+    # Try each colour's best one
     for colour in range(M):
-        my_prettinesses = get_prettinesses_of_colour(colour)
-
-        my_best = my_prettinesses[-1]
+        _, my_prettinesses = get_prettinesses_of_colour(colour)
+        my_best = max(my_prettinesses)
 
         # Try all other colour that could be a donor... omitting this one... :)
         for donor in range(M):
@@ -60,29 +60,38 @@ def find_optimal_change() -> tuple[int, int]:
             if len(other_prettinesses) == 1:
                 continue
 
-            other_prettinesses = get_prettinesses_of_colour(donor)
-            best_candidate = other_prettinesses[-2]
+            indices, other_prettinesses = get_prettinesses_of_colour(donor)
+
+            # Remove max to avoid swapping with it
+            # TODO I *think* this is good? That swapping with the max would not make sense?...          
+            other_prettinesses.remove(max(other_prettinesses)) # NB in Python this only removes one instance, so if there are duplicates, we're good
+            best_candidate = max(other_prettinesses)
+            i_prettiness = other_prettinesses.index(best_candidate)
+            i_colour = indices[i_prettiness]
 
             difference = best_candidate - my_best
             if difference > greatest_difference:
                 greatest_difference = difference
+                change_i = i_colour
                 change_oc = colour
                 change_nc = donor
-                change_i = None # TODO Whoops... don't have a way to keep track of this using this algorithm...
     
     return change_i, change_oc, change_nc            
 
-def get_prettinesses_of_colour(target_colour: int) -> list[int]:
+def get_prettinesses_of_colour(target_colour: int) -> tuple[list[int]]:
 
     # Gather the prettinesses of the pens of this colour
-    # Also sort them (will be useful for things that we do with this)
+    # Return them along with a parallel list of their indices
 
-    pens_of_this_colour = []
+    indices = []
+    prettinesses = []
+
     for i in range(len(colours)):
         if colours[i] == target_colour:
-            pens_of_this_colour.append(prettinesses[i])
+            indices.append[i]
+            prettinesses.append(prettinesses[i])
 
-    return sorted(pens_of_this_colour)
+    return indices, prettinesses
 
 def paint_picture(i) -> int:
 
@@ -95,8 +104,8 @@ def paint_picture(i) -> int:
 
     # For each colour, find the prettiest pen and add it to the painting's prettiness
     for colour in range(M):
-        prettinesses = get_prettinesses_of_colour(colour)
-        prettiness += prettinesses[-1] # They are sorted so the last one is the biggest
+        _, prettinesses = get_prettinesses_of_colour(colour)
+        prettiness += max(prettinesses)
 
     # Revert the optimization change if one was made
     colours[change_i] = change_oc
@@ -120,5 +129,4 @@ for i in range(Q):
     elif kind_of_change == 2:
         prettinesses[i_change] = new_value
 
-
-print(paint_picture)
+print(total_prettiness)
