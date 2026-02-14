@@ -79,10 +79,10 @@ def find_optimal_change() -> tuple[int, int]:
             if difference > greatest_difference:
                 greatest_difference = difference
                 change_i = i_colour
-                change_oc = colour
-                change_nc = donor
+                change_oc = donor
+                change_nc = colour
     
-    return change_i, change_oc, change_nc            
+    return change_i, change_oc, change_nc
 
 def get_prettinesses_of_colour(target_colour: int) -> tuple[list[int]]:
 
