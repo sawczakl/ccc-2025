@@ -47,20 +47,20 @@ def find_optimal_change() -> tuple[int, int]:
     greatest_difference = 0
 
     # Try each colour's best one
-    for colour in range(M):
+    for colour in range(1, M + 1):
         _, my_prettinesses = get_prettinesses_of_colour(colour)
         my_best = max(my_prettinesses)
 
         # Try all other colour that could be a donor... omitting this one... :)
-        for donor in range(M):
+        for donor in range(1, M + 1):
             if donor == colour:
                 continue
 
-            # If the donor colour has only one option, it can't donate
-            if len(other_prettinesses) == 1:
-                continue
-
             indices, other_prettinesses = get_prettinesses_of_colour(donor)
+
+            # If the donor colour has only one option, it can't donate
+            if len(indices) == 1:
+                continue
 
             # Remove max to avoid swapping with it
             # TODO I *think* this is good? That swapping with the max would not make sense?...          
@@ -84,16 +84,16 @@ def get_prettinesses_of_colour(target_colour: int) -> tuple[list[int]]:
     # Return them along with a parallel list of their indices
 
     indices = []
-    prettinesses = []
+    results = []
 
-    for i in range(len(colours)):
+    for i in range(N):
         if colours[i] == target_colour:
-            indices.append[i]
-            prettinesses.append(prettinesses[i])
+            indices.append(i)
+            results.append(prettinesses[i])
 
-    return indices, prettinesses
+    return indices, results
 
-def paint_picture(i) -> int:
+def paint_picture() -> int:
 
     # Get an optimal change. i, old colour, new colour
     change_i, change_oc, change_nc = find_optimal_change()
@@ -103,7 +103,7 @@ def paint_picture(i) -> int:
     prettiness = 0
 
     # For each colour, find the prettiest pen and add it to the painting's prettiness
-    for colour in range(M):
+    for colour in range(1, M + 1):
         _, prettinesses = get_prettinesses_of_colour(colour)
         prettiness += max(prettinesses)
 
@@ -113,11 +113,10 @@ def paint_picture(i) -> int:
     # Return painting's prettiness
     return prettiness
 
-total_prettiness = 0
+total_prettiness = paint_picture()
+print(total_prettiness)
 
-for i in range(Q):
-    total_prettiness += paint_picture(i)
-    
+for i in range(Q):    
     # Make the next change from Q
     kind_of_change, i_change, new_value = changes[i]
 
@@ -128,5 +127,6 @@ for i in range(Q):
     # 2 = change prettiness of i-th pen
     elif kind_of_change == 2:
         prettinesses[i_change] = new_value
-
-print(total_prettiness)
+    
+    total_prettiness += paint_picture()
+    print(total_prettiness)
